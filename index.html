@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
     <style>
       body {
         font-family: 'Poppins', sans-serif;
@@ -29,6 +30,15 @@
       ::-webkit-scrollbar-thumb:hover {
         background: #94a3b8;
       }
+      /* Mermaid styling overrides */
+      .mermaid {
+        display: flex;
+        justify-content: center;
+        background: #f8fafc;
+        padding: 1rem;
+        border-radius: 1rem;
+        margin: 1.5rem 0;
+      }
     </style>
   <script type="importmap">
 {
@@ -45,5 +55,15 @@
 </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Initialize mermaid
+      document.addEventListener('DOMContentLoaded', function () {
+        mermaid.initialize({ 
+          startOnLoad: true,
+          theme: 'neutral',
+          fontFamily: 'Poppins'
+        });
+      });
+    </script>
   </body>
 </html>

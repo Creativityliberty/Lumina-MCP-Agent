@@ -46,9 +46,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ contextUrl, sessionId, on
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition();
-      recognition.continuous = false;
+      recognition.continuous = false; // Easier to manage state if false
       recognition.interimResults = false;
       recognition.lang = 'en-US';
+
+      recognition.onstart = () => {
+          setIsListening(true);
+      };
 
       recognition.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
@@ -95,21 +99,37 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ contextUrl, sessionId, on
   }, [sessionId, contextUrl]);
 
   // Voice Handler
-  const toggleVoice = () => {
+  const toggleVoice = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent form submission
+    e.stopPropagation();
+
     if (!recognitionRef.current) {
-      alert("Voice input is not supported in this browser.");
+      alert("Voice input is not supported in this browser. Please use Chrome or Edge.");
       return;
     }
 
     if (isListening) {
       recognitionRef.current.stop();
     } else {
-      setIsListening(true);
-      recognitionRef.current.start();
+      try {
+        recognitionRef.current.start();
+      } catch (err) {
+        console.error("Recognition start failed", err);
+        // Reset and try again
+        recognitionRef.current.stop();
+        setTimeout(() => recognitionRef.current.start(), 200);
+      }
     }
   };
 
   // File Handler
+  const handleFileClick = () => {
+    if (fileInputRef.current) {
+        fileInputRef.current.value = ''; // Reset to allow same file selection
+        fileInputRef.current.click();
+    }
+  };
+
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -120,8 +140,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ contextUrl, sessionId, on
         name: file.name,
         content: text
       });
-      // Reset input value so same file can be selected again if needed
-      e.target.value = '';
     } catch (err) {
       console.error("Failed to read file", err);
       alert("Could not read file. Please ensure it is a text-based format (MD, TXT, Code).");
@@ -395,7 +413,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ contextUrl, sessionId, on
           />
           <button 
             type="button"
-            onClick={() => fileInputRef.current?.click()}
+            onClick={handleFileClick}
             className="p-3 bg-slate-100 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-2xl transition-all h-[56px] w-[56px] flex items-center justify-center shrink-0"
             title="Upload MD/Text file"
           >

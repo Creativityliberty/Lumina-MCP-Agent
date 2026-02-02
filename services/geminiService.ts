@@ -44,19 +44,30 @@ export const generateResponse = async (
 };
 
 export const generateArchitectureDoc = async (config: AppConfig, url: string): Promise<string> => {
-   const prompt = `Create a high-level architectural documentation (Markdown format) for a system based on the documentation found at: ${url}.
-   Structure it with:
-   1. System Overview
-   2. Core Components
-   3. Data Flow
-   4. Integration Points (MCP)
-   5. Security Considerations`;
+   const prompt = `Create a high-level architectural documentation for a system based on the documentation found at: ${url}.
+   
+   REQUIREMENTS:
+   1. Format as valid Markdown.
+   2. DO NOT use raw asterisks (**) for headers. Use #, ##, ###.
+   3. Include a Mermaid JS Sequence Diagram illustrating the data flow. Use a code block with language 'mermaid'.
+   4. Include a Mermaid JS Class Diagram for Core Components. Use a code block with language 'mermaid'.
+   5. Include a small ASCII Art section representing the high-level topology.
+   
+   Structure:
+   # System Overview
+   # Core Components (with Mermaid Class Diagram)
+   # Data Flow (with Mermaid Sequence Diagram)
+   # Network Topology (ASCII Art)
+   # Integration Points (MCP)
+   # Security Considerations`;
+
+   const systemInstruction = 'You are a senior software architect with an eye for aesthetic documentation. You produce technical documents that are both informative and visually structured with diagrams.';
 
    if (config.provider === 'google') {
-      return await generateGoogleResponse(config.googleKey, 'gemini-3-flash-preview', prompt, 'You are a senior software architect.');
+      return await generateGoogleResponse(config.googleKey, 'gemini-3-flash-preview', prompt, systemInstruction);
    } else {
       // Create a dummy history for OpenRouter single shot
-      return await generateOpenRouterResponse(config.openRouterKey, config.selectedModelId, [], prompt, 'You are a senior software architect.');
+      return await generateOpenRouterResponse(config.openRouterKey, config.selectedModelId, [], prompt, systemInstruction);
    }
 }
 
