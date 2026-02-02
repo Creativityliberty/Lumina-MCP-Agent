@@ -1,0 +1,5 @@
+{
+  "name": "Lumina MCP Agent",
+  "description": "A high-fidelity, innovative AI agent interface designed to triage website documentation into MCP servers and chat with context. Features a fluid, detached sidebar and premium aesthetics.",
+  "requestFramePermissions": []
+}
