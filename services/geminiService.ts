@@ -44,22 +44,25 @@ export const generateResponse = async (
 };
 
 export const generateArchitectureDoc = async (config: AppConfig, url: string): Promise<string> => {
-   const prompt = `Create a high-level architectural documentation for a system based on the documentation found at: ${url}.
+   const prompt = `Perform a comprehensive architectural analysis of the software/system described at: ${url}.
    
-   REQUIREMENTS:
-   1. Format as valid Markdown.
-   2. DO NOT use raw asterisks (**) for headers. Use #, ##, ###.
-   3. Include a Mermaid JS Sequence Diagram illustrating the data flow. Use a code block with language 'mermaid'.
-   4. Include a Mermaid JS Class Diagram for Core Components. Use a code block with language 'mermaid'.
-   5. Include a small ASCII Art section representing the high-level topology.
+   Generate a professional TECHNICAL DESIGN DOCUMENT (TDD) in Markdown.
    
-   Structure:
-   # System Overview
-   # Core Components (with Mermaid Class Diagram)
-   # Data Flow (with Mermaid Sequence Diagram)
-   # Network Topology (ASCII Art)
-   # Integration Points (MCP)
-   # Security Considerations`;
+   ### REQUIREMENTS:
+   1. **Aesthetics**: Use clean formatting, headers (#, ##, ###), and bullet points. Do not use bold (**) for headers.
+   2. **Diagrams**: You MUST include the following Mermaid JS diagrams:
+      - A **Sequence Diagram** showing the primary data flow.
+      - A **Class Diagram** or **Entity Relationship Diagram** for core components.
+      - A **State Diagram** or **Flowchart** for user interaction or system states.
+   3. **Structure**:
+      - **Executive Summary**: What is this system?
+      - **System Architecture**: High-level design patterns used.
+      - **Component Design**: Detailed breakdown of modules.
+      - **Data Flow**: Sequence diagrams.
+      - **Security & Scalability**: Key considerations.
+   4. **ASCII Art**: Include a small, creative ASCII art logo or topology map at the very top.
+   
+   Be creative and precise. Imagine you are the Chief Architect presenting to stakeholders.`;
 
    const systemInstruction = 'You are a senior software architect with an eye for aesthetic documentation. You produce technical documents that are both informative and visually structured with diagrams.';
 
